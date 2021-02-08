@@ -1,0 +1,99 @@
+body{
+    background-color: azure;
+}
+textarea{
+    font-family: Roboto, cursive;
+    font-weight: bold;
+}
+p{
+    margin-top: 1rem;
+}
+#morn_submit{
+    margin-top: 1.2rem;
+}
+#morn_delete{
+    margin-top: 1.2rem;
+    margin-left: 10px;
+}
+#index_header{
+    font-family:Roboto, cursive;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: coral;
+}
+#head_p_1{
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    line-height: 1.7;
+    color: rgba(1,1,0,0.75);
+    font-weight: lighter;
+}
+#head_p_2{
+    font-family: "Dancing Script", sans-serif;
+    font-size: 1.7rem;
+    line-height: 1.7;
+    color: chocolate;
+}
+.mod_btn{
+    position: relative;
+    color: deepskyblue;
+    background-color: transparent;
+    left: 48%;
+    margin-top: 0.5rem;
+}
+
+.mod_btn:hover{
+    background-color: transparent;
+    color: green;
+}
+
+.mod_btn_even{
+    position: relative;
+    left: 96%;
+    background-color: transparent;
+    color: deepskyblue;
+    top: 4px;
+}
+
+.mod_btn_even:hover{
+    background-color: transparent;
+    color: green;
+}
+#btn_div{
+    position: absolute;
+    left: 50%;
+    top: 1.2rem;
+    transform: translateX(-50%);
+}
+#display_date{
+    font-family: "Dancing Script", cursive;
+    color: darkorange;
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#last_updated{
+    margin-top: 0;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: cornflowerblue;
+    font-weight: bolder;
+}
+
+#already_exist_entry{
+    margin-top: 0;
+    color: red;
+    font-size: 1rem;
+    visibility: hidden;
+    margin-bottom: 5px;
+}
+.reload_btn_div{
+    position: relative;
+}
+.reload_btn{
+    position: relative;
+    left: 46%;
+    background-color: transparent;
+}

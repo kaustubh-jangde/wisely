@@ -1,0 +1,91 @@
+{% extends 'tmp/base.html' %}
+{% load static %}
+{% block style_block%}
+    <link rel="stylesheet" href="{% static 'wisely/css/styles.css' %}">
+{% endblock %}
+{% block content %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Delete?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete morning entry for <span id="modal_date"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="delete_modal_btn" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="" method="POST">{% csrf_token %}
+        <div class="container-fluid" style="margin-bottom: 6rem; margin-top: 2rem; width: 90vw;">
+            <div class="row">
+                <div class="col-lg-6">
+                    <p style="font-size: 2rem; margin-bottom: 0; font-family: 'Dancing Script', cursive; font-weight: bold; color: darkgreen" >Good Morning, {{ user.first_name }}.</p>
+                    <p style="margin-top: 4px" id="display_date"></p>
+                    <p id="last_updated" style="margin-top: 0;"></p>
+                </div>
+                <div class="col-lg-6" style="text-align: center">
+                    <p class="fa-lab"><i class="far fa-calendar-minus" style="color: darkslateblue"></i>  Date</p>
+                    <input class="form-control" type="date" name="date" max="{{ max_date }}" value="{{ max_date }}">
+                    <p id="already_exist_entry">Entry already exists. Writing new values will update the old.</p>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-6" style="text-align: center">
+                    <p class="fa-lab"><i class="fas fa-brain" style="color: green"></i>  Thoughts</p>
+                    <textarea name="thoughts" class="form-control" rows="7" placeholder="What's on your mind?"></textarea>
+                    <button type="button" class="btn mod_btn " id="thought_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+                <div class="col-lg-6" style="text-align: center">
+                    <p class="fa-lab"><i class="fas fa-compress-arrows-alt" style="color: aqua"></i>  Importance Urgency Table</p>
+                    <table style="margin-left: auto; margin-right: auto">
+                        <tr>
+                            <td><textarea name="iut1"  cols="40" rows="3" placeholder="Important but not Urgent." class="form-control"></textarea></td>
+                            <td><textarea name="iut2"  cols="40" rows="3" placeholder="Important as well as Urgent" class="form-control" ></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><textarea name="iut3" id="" cols="40" rows="3" placeholder="Neither Important Nor Urgent" class="form-control"></textarea></td>
+                            <td><textarea name="iut4" id="" cols="40" rows="3" placeholder="Urgent but not Important" class="form-control"></textarea></td>
+                        </tr>
+                    </table>
+                    <span id="iut_prev_log"></span>
+                    <button type="button" class="btn mod_btn " style="margin-top: 0.9rem" id="iut_mod_btn"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn reload_btn" style="margin-top: 0.9rem" id="iut_reload_btn"><i class="fas fa-sync-alt"></i></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6" style="text-align: center">
+                    <p class="fa-lab"><i class="fas fa-list" style="color: orange"></i>  TO-DO</p>
+                    <textarea name="todo" class="form-control" rows="7" placeholder="Things to do."></textarea>
+                    <span id="todo_prev_log"></span>
+                    <button type="button" class="btn mod_btn " id="todo_mod_btn"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn reload_btn" style="margin-top: 0.9rem" id="todo_reload_btn"><i class="fas fa-sync-alt"></i></button>
+
+                </div>
+                <div class="col-lg-6" style="text-align: center">
+                    <p class="fa-lab"><i class="fas fa-times-circle" style="color: red"></i>  NOT-TO-DO</p>
+                    <textarea name="not_to_do" class="form-control" rows="7" placeholder="Things not to do."></textarea>
+                    <span id="not_to_do_prev_log"></span>
+                    <button type="button" class="btn mod_btn " id="not_to_do_mod_btn"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn reload_btn" style="margin-top: 0.9rem" id="not_to_do_reload_btn"><i class="fas fa-sync-alt"></i></button>
+                </div>
+            </div>
+            <button class="btn btn-lg btn-primary" id="morn_submit">Write</button>
+            <button type="button" class="btn btn-lg btn-danger btn-dark" id="morn_delete" data-toggle="modal" data-target="#delete">
+                Delete
+            </button>
+        </div>
+    </form>
+    {% include 'wisely/morning_js.html' %}
+{% endblock %}

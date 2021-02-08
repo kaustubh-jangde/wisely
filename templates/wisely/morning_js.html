@@ -1,0 +1,352 @@
+<script>
+    let date = $("input[name = 'date']")
+
+    my_data = {dt: date.val()}
+    my_data = JSON.stringify(my_data)
+
+    let already_exists_entry = $("#already_exist_entry")
+    let exist = false
+    let prev_exists = false
+
+    let prev_data = undefined
+    let prev_date = undefined
+
+    let thought_text_area = $("textarea[name='thoughts']")
+    let iut1_text_area = $("textarea[name='iut1']")
+    let iut2_text_area = $("textarea[name='iut2']")
+    let iut3_text_area = $("textarea[name='iut3']")
+    let iut4_text_area = $("textarea[name='iut4']")
+    let todo_text_area = $("textarea[name='todo']")
+    let not_to_do_text_area = $("textarea[name='not_to_do']")
+
+
+    let thought_mod_btn = $("#thought_mod_btn")
+    let iut_mod_btn = $("#iut_mod_btn")
+    let todo_mod_btn = $("#todo_mod_btn")
+    let not_to_do_mod_btn = $("#not_to_do_mod_btn")
+
+    let mod_btn_class_list = $(".mod_btn")
+    mod_btn_class_list.hide()
+
+    let morn_delete = $("#morn_delete")
+
+    let last_updated = $("#last_updated")
+
+    let iut_reload = $("#iut_reload_btn")
+    let todo_reload = $("#todo_reload_btn")
+    let not_to_do_reload = $("#not_to_do_reload_btn")
+
+    let iut_perv_log = $("#iut_prev_log")
+    let todo_prev_log = $('#todo_prev_log')
+    let not_to_do_prev_log = $('#not_to_do_prev_log')
+
+    function delete_enabler(){
+        if(exist){
+            morn_delete.prop('disabled', false)
+            morn_delete.removeClass('btn-dark')
+            morn_delete.addClass('btn-danger')
+        }
+        else{
+            morn_delete.prop('disabled', true)
+            morn_delete.removeClass('btn-danger')
+            morn_delete.addClass('btn-dark')
+        }
+    }
+
+    function reload_log_evacuation(){
+        iut_perv_log.text('')
+        todo_prev_log.text('')
+        not_to_do_prev_log.text('')
+    }
+
+    function reload_enabler(){
+        if(prev_exists){
+            iut_reload.prop('disabled', false)
+            todo_reload.prop('disabled', false)
+            not_to_do_reload.prop('disabled', false)
+        }
+    }
+
+    function reload_disabler(){
+        if(!prev_exists){
+            iut_reload.prop('disabled', true)
+            todo_reload.prop('disabled', true)
+            not_to_do_reload.prop('disabled', true)
+        }
+    }
+
+    function reload_hide(){
+        iut_reload.hide()
+        todo_reload.hide()
+        not_to_do_reload.hide()
+    }
+
+    function reload_unhide(){
+        iut_reload.show()
+        todo_reload.show()
+        not_to_do_reload.show()
+    }
+
+
+    function reload_data_evacuation(){
+        iut1_text_area.val('')
+        iut2_text_area.val('')
+        iut3_text_area.val('')
+        iut4_text_area.val('')
+        todo_text_area.val('')
+        not_to_do_text_area.val('')
+    }
+
+
+    function exists_change(val_dict){
+        already_exists_entry.css('visibility', 'visible')
+        exist = true
+
+        last_updated.text("Last Updated: " + val_dict['last_updated'])
+
+        mod_btn_class_list.show()
+
+        thought_text_area.val(val_dict['thoughts'])
+        thought_text_area.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        thought_text_area.prop('readonly', true)
+
+        iut1_text_area.val(val_dict['iut1'])
+        iut1_text_area.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        iut1_text_area.prop('readonly', true)
+
+        iut2_text_area.val(val_dict['iut2'])
+        iut2_text_area.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        iut2_text_area.prop('readonly', true)
+
+        iut3_text_area.val(val_dict['iut3'])
+        iut3_text_area.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        iut3_text_area.prop('readonly', true)
+
+        iut4_text_area.val(val_dict['iut4'])
+        iut4_text_area.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        iut4_text_area.prop('readonly', true)
+
+        todo_text_area.val(val_dict['todo'])
+        todo_text_area.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        todo_text_area.prop('readonly', true)
+
+        not_to_do_text_area.val(val_dict['not_to_do'])
+        not_to_do_text_area.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        not_to_do_text_area.prop('readonly', true)
+
+        delete_enabler()
+
+    }
+
+
+    function not_exists_change(){
+        already_exists_entry.css('visibility', 'hidden')
+        exist = false
+
+        last_updated.text("New Entry")
+
+
+        mod_btn_class_list.hide()
+
+        thought_text_area.val("")
+        thought_text_area.css({'background-color': 'white', 'color': 'black'})
+        thought_text_area.prop('readonly', false)
+
+        iut1_text_area.val("")
+        iut1_text_area.css({'background-color': 'white', 'color': 'black'})
+        iut1_text_area.prop('readonly', false)
+
+        iut2_text_area.val("")
+        iut2_text_area.css({'background-color': 'white', 'color': 'black'})
+        iut2_text_area.prop('readonly', false)
+
+        iut3_text_area.val("")
+        iut3_text_area.css({'background-color': 'white', 'color': 'black'})
+        iut3_text_area.prop('readonly', false)
+
+        iut4_text_area.val("")
+        iut4_text_area.css({'background-color': 'white', 'color': 'black'})
+        iut4_text_area.prop('readonly', false)
+
+        todo_text_area.val("")
+        todo_text_area.css({'background-color': 'white', 'color': 'black'})
+        todo_text_area.prop('readonly', false)
+
+        not_to_do_text_area.val("")
+        not_to_do_text_area.css({'background-color': 'white', 'color': 'black'})
+        not_to_do_text_area.prop('readonly', false)
+
+        delete_enabler()
+    }
+
+    function reload_btn_default_styling(){
+        iut_reload.css('left', '48%')
+        todo_reload.css('left', '48%')
+        not_to_do_reload.css('left', '48%')
+    }
+
+
+    $.ajax({
+        url: "{% url 'wisely:morning_ajax_url' %}",
+        method: "POST",
+        data: {csrfmiddlewaretoken: "{{ csrf_token }}", 'dt': my_data},
+        success: function (data){
+            delete_enabler()
+            $('#display_date').text("Date: "+date.val())
+            if(data['status'] === 1)
+            {
+                let val_dict = data['val_dict']
+                exists_change(val_dict)
+                reload_hide()
+            }
+            else{
+                if(data['prev']){
+                    prev_exists = true
+                    prev_data = data['prev_data']
+                    prev_date = data['prev_date']
+                    reload_data_evacuation()
+                    reload_enabler()
+                    reload_btn_default_styling()
+                }
+                else{
+                    prev_exists = false
+                    prev_data = undefined
+                    prev_date = undefined
+                    reload_data_evacuation()
+                    reload_btn_default_styling()
+                    reload_disabler()
+                }
+            }
+        }
+    })
+
+    date.change(function(){
+        let my_data = {dt: date.val()}
+        my_data = JSON.stringify(my_data)
+        $.ajax({
+            url: "{% url 'wisely:morning_ajax_url' %}",
+            method: "POST",
+            data: {csrfmiddlewaretoken: "{{ csrf_token }}", 'dt': my_data},
+            success: function (data){
+                console.log('before')
+                $("#display_date").text("Date: "+date.val())
+                console.log('after')
+
+                let val_dict = data['val_dict']
+                if(data['status'] === 1)
+                {
+                    exists_change(val_dict)
+                    reload_hide()
+                }
+                else{
+                    not_exists_change()
+                    if(data['prev']){
+                        prev_exists = true
+                        prev_data = data['prev_data']
+                        prev_date = data['prev_date']
+                        reload_enabler()
+                        reload_log_evacuation()
+                        reload_btn_default_styling()
+                        reload_unhide()
+                    }
+                    else{
+                        prev_exists = false
+                        prev_data = undefined
+                        prev_date = undefined
+                        reload_data_evacuation()
+                        reload_log_evacuation()
+                        reload_btn_default_styling()
+                        reload_unhide()
+                        reload_disabler()
+                    }
+                }
+            }
+        })
+    })
+
+
+    thought_mod_btn.click(function (){
+        if(exist){
+            thought_text_area.css({'background-color': 'white', 'color': 'black'})
+            thought_text_area.prop('readonly', false)
+            thought_text_area.focus()
+        }
+    })
+
+    iut_mod_btn.click(function (){
+        if(exist){
+            iut1_text_area.css({'background-color': 'white', 'color': 'black'})
+            iut1_text_area.prop('readonly', false)
+
+            iut2_text_area.css({'background-color': 'white', 'color': 'black'})
+            iut2_text_area.prop('readonly', false)
+
+            iut3_text_area.css({'background-color': 'white', 'color': 'black'})
+            iut3_text_area.prop('readonly', false)
+
+            iut4_text_area.css({'background-color': 'white', 'color': 'black'})
+            iut4_text_area.prop('readonly', false)
+        }
+    })
+
+    todo_mod_btn.click(function (){
+        if(exist){
+            todo_text_area.css({'background-color': 'white', 'color': 'black'})
+            todo_text_area.prop('readonly', false)
+            todo_text_area.focus()
+        }
+    })
+
+    not_to_do_mod_btn.click(function (){
+        if(exist){
+            not_to_do_text_area.css({'background-color': 'white', 'color': 'black'})
+            not_to_do_text_area.prop('readonly', false)
+            not_to_do_text_area.focus()
+        }
+    })
+
+    morn_delete.click(function (){
+        $("#modal_date").text(date.val())
+    })
+
+
+    $("#delete_modal_btn").click(function (){
+        if(exist){
+            let my_data = {dt: date.val()}
+            my_data = JSON.stringify(my_data)
+            $.ajax({
+                url: "{% url 'wisely:morning_del_ajax_url' %}",
+                method: "POST",
+                data: {csrfmiddlewaretoken: "{{ csrf_token }}", 'dt': my_data},
+                success: function (data){
+                    if(data['status'] === 1){
+                        window.location = "{% url 'wisely:index_url' %}"
+                    }
+                }
+            })
+        }
+    })
+
+    iut_reload.click(function (){
+        console.log(prev_data)
+        iut1_text_area.val(prev_data['iut1'])
+        iut2_text_area.val(prev_data['iut2'])
+        iut3_text_area.val(prev_data['iut3'])
+        iut4_text_area.val(prev_data['iut4'])
+        iut_perv_log.text('Table imported from '+ prev_date)
+        iut_reload.css('left', "30%")
+    })
+
+    todo_reload.click(function (){
+        todo_text_area.val(prev_data['todo'])
+        todo_prev_log.text('Todo list from '+prev_date)
+        todo_reload.css('left', "30%")
+    })
+
+    not_to_do_reload.click(function (){
+        not_to_do_text_area.val(prev_data['not_to_do'])
+        not_to_do_prev_log.text('Not to-do list from '+prev_date)
+        not_to_do_reload.css('left', "30%")
+    })
+
+</script>

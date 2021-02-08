@@ -1,0 +1,119 @@
+{% extends 'tmp/base.html' %}
+{% load static %}
+{% load my_extras %}
+{% block style_block%}
+    <link rel="stylesheet" href="{% static 'wisely/css/styles.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container-fluid" style="margin-bottom: 6rem; margin-top: 2rem; width: 90vw;">
+        <h4 id="head_p_2">Anchors help a vessel avoid drifting due to wind or current. Some incidents in life provide us immense motivation to get to our target. Use these motivational incidents as your anchors to keep you targeted to your goal and avoid you drifting away in hard times.</h4>
+        <div class="row"style="margin-top: 2.5rem">
+            <div class="col-lg-6" style="border: 1px solid rgba(0,0,0,0.2)">
+            <span id="head_p_1" style="font-size: 3.5rem">Anchors</span>
+                {% ifequal anchor_list|length 0 %}
+                    <p style="font-size: 1.3rem; font-family: Roboto, cursive;">Start adding Anchors.</p>
+                {% else %}
+                    <ul>
+                        {% for i in anchor_list %}
+                            <li style="font-size: 1.5rem">{{ i.data|capfirst }}</li>
+
+                            <textarea name="" class="update_textarea" id="{{ i.id|concat:'update_textarea_' }}" cols="22" rows="3" style="width: 0; border: 1px solid rgba(0, 0, 0, .1);"></textarea>
+                            <button class="update_confirm btn btn-success btn-sm" id="{{ i.id|concat:'update_confirm_'}}" style="position: relative; bottom: 1rem;">Update</button>
+
+                            <div>
+                                <button class="btn btn-sm btn-success update_btn" id="{{ i.id|concat:'update_btn_' }}" style="font-size: 0.7rem;"><i class="fas fa-pen-alt"></i></button>
+                                {#modal#}
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="{{ i.id|concat:'#exampleModal' }}" style="font-size: 0.7rem">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="{{ i.id|concat:'exampleModal' }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete the anchor?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-danger del_btn" id="{{ i.id|concat:'del_btn_' }}">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endifequal %}
+            </div>
+            <div class="col-lg-6">
+                <form method="post">{% csrf_token %}
+                    <label for="anc_inp"></label>
+                    <textarea name="anchor" class="form-control" id="anc_inp" cols="40" rows="10" placeholder="Add new Anchor" style="display: block; margin:auto"></textarea>
+                    <button class="btn btn-primary" style="margin: 3% 41% 0;" id="anchor_submit">Add Anchor</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.update_confirm').hide()
+        $('.update_textarea').hide()
+        $(".del_btn").click(function (){
+            let clicked_id = $(this).attr('id')
+            clicked_id = clicked_id.slice(8,)
+            $.ajax({
+                url: "{% url 'wisely:anchor_del_url' %}",
+                method: "POST",
+                data: {csrfmiddlewaretoken: "{{ csrf_token }}", 'anchor_id': clicked_id},
+                success: function (data){
+                    if(data['status'] === 1){
+                        window.location = "{% url 'wisely:anchor_url' %}"
+                    }
+                }
+            })
+        })
+        $(".update_btn").click(function (){
+            let btn_id = $(this).attr("id")
+            let id = btn_id.slice(11,)
+            let textarea_id = '#update_textarea_' + id
+            let update_confirm_id = '#update_confirm_' + id
+            if($(textarea_id).is(':visible')){
+                $(textarea_id).attr('placeholder', '')
+                $(update_confirm_id).animate({'opacity': 'hide'}, 400)
+                $(textarea_id).animate({'width': '0', 'opacity': 'hide'}, 500)
+            }
+            else {
+                $(textarea_id).animate({'width': '60%', 'opacity': 'show'}, 500)
+                setTimeout(function (){
+                    $(update_confirm_id).animate({'opacity': 'show', 'animation': 'easeout'}, 500)
+                }, 100)
+                setTimeout(function (){
+                    $(textarea_id).attr('placeholder', 'Update Anchor here. Submitting empty data will delete the anchor')
+                }, 500)
+            }
+        })
+
+        $(".update_confirm").click(function () {
+            let btn_id = $(this).attr("id")
+            let id = btn_id.slice(15,)
+            let textarea_id = '#update_textarea_' + id
+            let data = $(textarea_id).val()
+            $.ajax({
+                url: "{% url 'wisely:anchor_update_url' %}",
+                method: "POST",
+                data: {csrfmiddlewaretoken: "{{ csrf_token }}", 'anchor_id': id, 'new_data': data},
+                success: function (data){
+                    if(data['status'] === 1){
+                        window.location = "{% url 'wisely:anchor_url' %}"
+                    }
+                }
+            })
+        });
+
+    </script>
+{% endblock %}

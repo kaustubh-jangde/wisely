@@ -1,0 +1,20 @@
+{% extends 'tmp/base.html' %}
+{% load static %}
+{% block style_block %}
+    <link rel="stylesheet" href="{% static 'register/css/styles.css' %}">
+{% endblock %}
+{% block content %}
+    <div id="form_div" style="background-color: salmon;">
+    <h6 class="high">Signup</h6>
+        <form action="" method="POST">{% csrf_token %}
+            <span id="already_taken">*Username already taken*</span>
+            {{ user_form.as_p }}
+        </form>
+        <span id="password_match">*Passwords don't match*</span>
+        <div id="submit_btn_div">
+            <button id="signup_submit_btn" class="btn btn-lg btn-success">submit</button>
+        </div>
+            <p style="text-align: center">Already a User? <a href="{% url 'registration:login_url' %}" class="anchor-link">Login Here</a></p>
+    </div>
+    {% include 'register/signup_page_js.html' %}
+{% endblock %}

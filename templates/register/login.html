@@ -1,0 +1,26 @@
+{% extends 'tmp/base.html'%}
+{% load static %}
+{% block style_block %}
+    <link rel="stylesheet" href="{% static 'register/css/login_styles.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="login_form">
+        <h6 class="high">Login</h6>
+        <form action="" method="POST">{% csrf_token %}
+            <span id="userpass_check" style="color: red; font-weight: bolder">*You've entered wrong username or password.*</span>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input name="username" type="email" class="form-control" id="username" placeholder="UnbeatableX">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input name="password" type="password" class="form-control" id="password" placeholder="********">
+            </div>
+        </form>
+        <div style="position: relative; margin: 10% 0 18%;">
+            <button class="btn btn-success" id="login_btn">Login</button>
+        </div>
+        <p style="text-align: center">New User? <a href="{% url 'registration:signup_url' %}" class="anchor-link">Sign Up Here</a></p>
+    </div>
+    {% include 'register/login_js.html' %}
+{% endblock %}

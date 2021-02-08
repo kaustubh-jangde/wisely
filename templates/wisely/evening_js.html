@@ -1,0 +1,248 @@
+<script>
+    let date = $("input[name = 'date']")
+
+    let already_exists_entry = $("#already_exist_entry")
+    let exist = false
+
+    my_data = {dt: date.val()}
+    my_data = JSON.stringify(my_data)
+
+    let d_dx = $("#d_dx")
+    let good_things = $("#good_things")
+    let shouldnt_have_done = $("#shouldnt_have_done")
+    let modifications = $("#modifications")
+    let habits_to_let_go_of = $("#habits_to_let_go_of")
+    let strengths = $("#strengths")
+    let weaknesses = $("#weaknesses")
+    let overview = $("#overview")
+    let rating = $("#rating")
+
+    let mod_btn_even_class_list = $(".mod_btn_even")
+    mod_btn_even_class_list.hide()
+
+    let even_delete = $('#even_delete')
+
+    let last_updated = $("#last_updated")
+
+
+    function delete_enabler(){
+        if(exist){
+            even_delete.prop('disabled', false)
+            even_delete.removeClass('btn-dark')
+            even_delete.addClass('btn-danger')
+        }
+        else{
+            even_delete.prop('disabled', true)
+            even_delete.removeClass('btn-danger')
+            even_delete.addClass('btn-dark')
+        }
+    }
+
+
+    function exists_change(val_dict){
+        already_exists_entry.css('visibility', 'visible')
+        exist = true
+
+        last_updated.text("Last Updated: " + val_dict['last_updated'])
+
+        mod_btn_even_class_list.show()
+
+        d_dx.val(val_dict['d_dx'])
+        d_dx.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        d_dx.prop('readonly', true)
+
+        good_things.val(val_dict['good_things'])
+        good_things.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        good_things.prop('readonly', true)
+
+        shouldnt_have_done.val(val_dict['shouldnt_have_done'])
+        shouldnt_have_done.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        shouldnt_have_done.prop('readonly', true)
+
+        modifications.val(val_dict['modifications'])
+        modifications.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        modifications.prop('readonly', true)
+
+        habits_to_let_go_of.val(val_dict['habits_to_let_go_of'])
+        habits_to_let_go_of.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        habits_to_let_go_of.prop('readonly', true)
+
+        strengths.val(val_dict['strengths'])
+        strengths.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        strengths.prop('readonly', true)
+
+        weaknesses.val(val_dict['weaknesses'])
+        weaknesses.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        weaknesses.prop('readonly', true)
+
+        overview.val(val_dict['overview'])
+        overview.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        overview.prop('readonly', true)
+
+        rating.val(val_dict['rating'])
+        rating.css({'background-color': 'lightgoldenrodyellow', 'color': 'grey'})
+        rating.prop('readonly', true)
+
+        delete_enabler()
+
+    }
+
+
+    function not_exists_change(){
+        already_exists_entry.css('visibility', 'hidden')
+        exist=false
+
+        mod_btn_even_class_list.hide()
+
+        last_updated.text("New Entry")
+
+        d_dx.val("")
+        d_dx.css({'background-color': 'white', 'color': 'black'})
+        d_dx.prop('readonly', false)
+
+        good_things.val("")
+        good_things.css({'background-color': 'white', 'color': 'black'})
+        good_things.prop('readonly', false)
+
+        shouldnt_have_done.val("")
+        shouldnt_have_done.css({'background-color': 'white', 'color': 'black'})
+        shouldnt_have_done.prop('readonly', false)
+
+        modifications.val("")
+        modifications.css({'background-color': 'white', 'color': 'black'})
+        modifications.prop('readonly', false)
+
+        habits_to_let_go_of.val("")
+        habits_to_let_go_of.css({'background-color': 'white', 'color': 'black'})
+        habits_to_let_go_of.prop('readonly', false)
+
+        strengths.val("")
+        strengths.css({'background-color': 'white', 'color': 'black'})
+        strengths.prop('readonly', false)
+
+        weaknesses.val("")
+        weaknesses.css({'background-color': 'white', 'color': 'black'})
+        weaknesses.prop('readonly', false)
+
+        overview.val("")
+        overview.css({'background-color': 'white', 'color': 'black'})
+        overview.prop('readonly', false)
+
+        rating.val(-1)
+        rating.css({'background-color': 'white', 'color': 'black'})
+        rating.prop('readonly', false)
+
+        delete_enabler()
+    }
+
+
+    $.ajax({
+        url: "{% url 'wisely:evening_ajax_url' %}",
+        method: "POST",
+        data: {csrfmiddlewaretoken: "{{ csrf_token }}", 'dt': my_data},
+        success: function (data){
+            $('#display_date').text("Date: "+date.val())
+            delete_enabler()
+            if(data['status'] === 1){
+                let val_dict = data['val_dict']
+                exists_change(val_dict)
+            }
+        }
+    })
+
+    date.change(function (){
+        let my_data = {dt: date.val()}
+        my_data = JSON.stringify(my_data)
+        $.ajax({
+            url: "{% url 'wisely:evening_ajax_url' %}",
+            method: "POST",
+            data: {csrfmiddlewaretoken: "{{ csrf_token }}", 'dt': my_data},
+            success: function (data){
+                $('#display_date').text("Date: "+date.val())
+                if(data['status'] === 1){
+                    let val_dict = data['val_dict']
+                    exists_change(val_dict)
+                }
+                else{
+                    not_exists_change()
+                }
+            }
+        })
+    })
+
+    $("#d_dx_mod_btn").click(function (){
+        d_dx.css({'background-color': 'white', 'color': 'black'})
+        d_dx.prop('readonly', false)
+        d_dx.focus()
+    })
+
+    $("#good_things_mod_btn").click(function (){
+        good_things.css({'background-color': 'white', 'color': 'black'})
+        good_things.prop('readonly', false)
+        good_things.focus()
+    })
+
+    $("#shouldnt_have_done_mod_btn").click(function (){
+        shouldnt_have_done.css({'background-color': 'white', 'color': 'black'})
+        shouldnt_have_done.prop('readonly', false)
+        shouldnt_have_done.focus()
+    })
+
+    $("#modifications_mod_btn").click(function (){
+        modifications.css({'background-color': 'white', 'color': 'black'})
+        modifications.prop('readonly', false)
+        modifications.focus()
+    })
+
+    $("#habits_to_let_go_of_mod_btn").click(function (){
+        habits_to_let_go_of.css({'background-color': 'white', 'color': 'black'})
+        habits_to_let_go_of.prop('readonly', false)
+        habits_to_let_go_of.focus()
+    })
+
+    $("#strengths_mod_btn").click(function (){
+        strengths.css({'background-color': 'white', 'color': 'black'})
+        strengths.prop('readonly', false)
+        strengths.focus()
+    })
+
+    $("#weaknesses_mod_btn").click(function (){
+        weaknesses.css({'background-color': 'white', 'color': 'black'})
+        weaknesses.prop('readonly', false)
+        weaknesses.focus()
+    })
+
+    $("#overview_mod_btn").click(function (){
+        overview.css({'background-color': 'white', 'color': 'black'})
+        overview.prop('readonly', false)
+        overview.focus()
+    })
+
+    $("#rating_mod_btn").click(function (){
+        rating.css({'background-color': 'white', 'color': 'black'})
+        rating.prop('readonly', false)
+    })
+
+
+    even_delete.click(function (){
+        $("#modal_date").text(date.val())
+    })
+
+    $("#delete_modal_btn").click(function (){
+        if(exist){
+            let my_data = {dt: date.val()}
+            my_data = JSON.stringify(my_data)
+            $.ajax({
+                url: "{% url 'wisely:even_del_ajax_url' %}",
+                method: "POST",
+                data: {csrfmiddlewaretoken: "{{ csrf_token }}", 'dt': my_data},
+                success: function (data) {
+                    if(data['status'] === 1){
+                        window.location = "{% url 'wisely:index_url' %}"
+                    }
+                }
+            })
+        }
+    })
+
+</script>

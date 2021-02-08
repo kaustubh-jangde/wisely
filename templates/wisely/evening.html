@@ -1,0 +1,153 @@
+{% extends 'tmp/base.html' %}
+{% load static %}
+{% block style_block%}
+    <link rel="stylesheet" href="{% static 'wisely/css/styles.css' %}">
+{% endblock %}
+{% block content %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Delete?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the evening entry for <span id="modal_date"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="delete_modal_btn" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid" style="margin-bottom: 6rem; margin-top: 2rem; width: 90%;">
+        <form action="" method="POST">{% csrf_token %}
+            <div class="row">
+                <div class="col-lg-6">
+                    <p style="font-size: 2rem; margin-bottom: 0; font-family: 'Dancing Script', cursive; font-weight: bold; color: darkgreen" >Good Evening {{ user.first_name }}.</p>
+                    <p id="display_date"></p>
+                    <p id="last_updated"></p>
+                </div>
+                <div class="col-lg-6" style="text-align: center">
+                    <p class="fa-lab"><i class="far fa-calendar-minus" style="color: darkslateblue"></i>  Date</p>
+                    <input class="form-control" type="date" name="date" max="{{ max_date }}" value="{{ max_date }}">
+                    <p id="already_exist_entry">Entry already exists. Writing new values will update the old.</p>
+
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-3" style="text-align: center">
+                    d/dx  <i class="fas fa-laugh-beam" style="color:green;"></i><br>
+                    <span class="text-muted">Even small positive changes in life matters a lot and we must appreciate those. Keep making those changes daily and you'll soon become a great person.</span>
+                </div>
+                <div class="col-lg-9">
+                    <textarea name="d_dx" id="d_dx" class="form-control"></textarea>
+                    <button type="button" class="btn mod_btn_even " id="d_dx_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-3" style="text-align: center">
+                    Good things <i class="fas fa-hand-holding-heart" style="color:hotpink;"></i><br>
+                    <span class="text-muted">There'll be certain good things you did today... Spare a moment to make note of that and feel proud of yourself.</span>
+                </div>
+                <div class="col-lg-9">
+                    <textarea name="good_things" id="good_things" class="form-control"></textarea>
+                    <button type="button" class="btn mod_btn_even" id="good_things_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-3" style="text-align: center">
+                    Shouldn't have done <i class="fas fa-sad-tear" style="color: #3447ff"></i><br>
+                    <span class="text-muted">While you did some great things today, there might be some actions that you shouldn't have taken. Make note of those sad happenings and decide to work on your mistakes.</span>
+                </div>
+                <div class="col-lg-9">
+                    <textarea name="shouldnt_have_done" id="shouldnt_have_done" class="form-control"></textarea>
+                    <button type="button" class="btn mod_btn_even" id="shouldnt_have_done_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-3" style="text-align: center">
+                    Modifications <i class="fas fa-wrench" style="color: lightgreen"></i><br>
+                    <span class="text-muted">Analyse your day and find what you could've done better. Also find the changes that you must make in your habits to make you more effective and happy.</span>
+                </div>
+                <div class="col-lg-9">
+                    <textarea name="modifications" id="modifications" class="form-control"></textarea>
+                    <button type="button" class="btn mod_btn_even " id="modifications_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-3" style="text-align: center">
+                    Habits to let go of  <i class="fas fa-trash-alt" style="color: red"></i><br>
+                    <span class="text-muted">While some habits make you better, some holds you back from reaching your full potential. Make note of such habits and remove those permanantly.</span>
+                </div>
+                <div class="col-lg-9">
+                    <textarea name="habits_to_let_go_of" id="habits_to_let_go_of" class="form-control"></textarea>
+                    <button type="button" class="btn mod_btn_even " id="habits_to_let_go_of_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-3" style="text-align: center">
+                    Strengths  <i class="fas fa-dumbbell" style="color: #4ba7ff "></i><br>
+                    <span class="text-muted">To perform well in every battle of your life, you must be aware of your strengths and gives you upper hand over situations you encounter.</span>
+                </div>
+                <div class="col-lg-9">
+                    <textarea name="strengths" id="strengths" class="form-control"></textarea>
+                    <button type="button" class="btn mod_btn_even " id="strengths_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-3" style="text-align: center">
+                    Weaknesses  <i class="fas fa-grin-beam-sweat" style="color: #7d62ff"></i><br>
+                    <span class="text-muted">While you have strengths in your repertoire, there may be weaknesses that could get you in trouble. Try to identify those and work on them before they bring trouble.</span>
+                </div>
+                <div class="col-lg-9">
+                    <textarea name="weaknesses" id="weaknesses" class="form-control"></textarea>
+                    <button type="button" class="btn mod_btn_even " id="weaknesses_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-3" style="text-align: center">
+                    Overview  <i class="fas fa-grin-wink" style="color: #43ff78"></i><br>
+                    <span class="text-muted">Write brief overview about your day. Mention if anything makes your day special.</span>
+                </div>
+                <div class="col-lg-9">
+                    <textarea name="overview" id="overview" class="form-control"></textarea>
+                    <button type="button" class="btn mod_btn_even " id="overview_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-3" style="text-align: center">
+                    Rate your day <i class="fas fa-star-half-alt" style="color: cadetblue"></i>
+                </div>
+                <div class="col-lg-9" >
+                    <select name="rating" id="rating" class="form-control form-control-md">
+                        <option value="5">Awesome</option>
+                        <option value="4">Great</option>
+                        <option value="3">Good</option>
+                        <option value="2">Okay</option>
+                        <option value="1">Poor</option>
+                        <option value="-1" selected style="visibility:hidden;">Rate your day</option>
+                    </select>
+                    <button type="button" class="btn mod_btn_even " id="rating_mod_btn"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+            <div style="position: relative">
+                <div id="btn_div">
+                    <button class="btn btn-lg btn-primary" id="even_submit">Write</button>
+                    <button type="button" class="btn btn-lg btn-danger btn-dark" id="even_delete" data-toggle="modal" data-target="#delete">
+                        Delete
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    {% include 'wisely/evening_js.html' %}
+{% endblock %}
