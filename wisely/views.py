@@ -58,15 +58,15 @@ def morning_view(request):
             val_dict['last_updated'] = datetime.datetime.now().strftime("%d %B, %Y  %I:%M %p")
             json_val = json.dumps(val_dict)
             print('does not exist')
-            encrypted = cryptocode.encrypt(json_val, request.user.username+str(request.user.id))
-            morning_entry(date=date, user_id=request.user, data=encrypted).save()
+            # encrypted = cryptocode.encrypt(json_val, request.user.username+str(request.user.id))
+            morning_entry(date=date, user_id=request.user, data=json_val).save()
             print('saved')
             return HttpResponseRedirect('/morn_redirect/')
         else:
             val_dict['last_updated'] = datetime.datetime.now().strftime("%d %B, %Y  %I:%M %p")
             json_val = json.dumps(val_dict)
-            encrypted = cryptocode.encrypt(json_val, request.user.username+str(request.user.id))
-            morning[0].data = encrypted
+            # encrypted = cryptocode.encrypt(json_val, request.user.username+str(request.user.id))
+            morning[0].data = json_val
             morning[0].save()
             print('modified')
             return HttpResponseRedirect('/morn_redirect/')
@@ -101,13 +101,13 @@ def morning_ajax(request):
             if prev_date > date.date():
                 return JsonResponse({'status': 0, 'val_dict': val_dict, 'prev': 0})
             prev_data = morning_entry.objects.filter(user_id=request.user, date=prev_date)[0].data
-            prev_data = cryptocode.decrypt(prev_data, request.user.username+str(request.user.id))
+            # prev_data = cryptocode.decrypt(prev_data, request.user.username+str(request.user.id))
             print(prev_data)
             prev_data = json.loads(prev_data)
             return JsonResponse({'status': 0, 'val_dict': val_dict, 'prev': 1, 'prev_data': prev_data, 'prev_date': prev_date})
     else:
-        encrypted = morning[0].data
-        val_dict = cryptocode.decrypt(encrypted, request.user.username+str(request.user.id))
+        val_dict = morning[0].data
+        # val_dict = cryptocode.decrypt(encrypted, request.user.username+str(request.user.id))
         val_dict = json.loads(val_dict)
         return JsonResponse({'status': 1,
                              'val_dict': val_dict})
@@ -164,13 +164,13 @@ def evening_view(request):
         elif len(evening) == 0:
             value_dict['last_updated'] = datetime.datetime.now().strftime("%d %B, %Y  %I:%M %p")
             json_val = json.dumps(value_dict)
-            encrypted = cryptocode.encrypt(json_val, request.user.username+str(request.user.id))
-            evening_entry(date=date, user_id=request.user, data=encrypted).save()
+            # encrypted = cryptocode.encrypt(json_val, request.user.username+str(request.user.id))
+            evening_entry(date=date, user_id=request.user, data=json_val).save()
         else:
             value_dict['last_updated'] = datetime.datetime.now().strftime("%d %B, %Y  %I:%M %p")
             json_val = json.dumps(value_dict)
-            encrypted = cryptocode.encrypt(json_val, request.user.username+str(request.user.id))
-            evening[0].data = encrypted
+            # encrypted = cryptocode.encrypt(json_val, request.user.username+str(request.user.id))
+            evening[0].data = json_val
             evening[0].save()
         return HttpResponseRedirect('/')
 
@@ -186,8 +186,8 @@ def evening_ajax(request):
     if len(evening) == 0:
         return JsonResponse({'status': 0})
     else:
-        encrypted = evening[0].data
-        val_dict = cryptocode.decrypt(encrypted, request.user.username+str(request.user.id))
+        val_dict = evening[0].data
+        # val_dict = cryptocode.decrypt(encrypted, request.user.username+str(request.user.id))
         val_dict = json.loads(val_dict)
         return JsonResponse({'status': 1, 'val_dict': val_dict})
 
@@ -210,14 +210,14 @@ def morn_redirect(request):
 def anchor_view(request):
     if request.method == "POST":
         anchor_data = request.POST['anchor']
-        anchor_data = cryptocode.encrypt(anchor_data, request.user.username+str(request.user.id))
+        # anchor_data = cryptocode.encrypt(anchor_data, request.user.username+str(request.user.id))
         anchor(user_id=request.user, data=anchor_data).save()
         return HttpResponseRedirect('/anchor/')
     anchor_list = anchor.objects.filter(user_id=request.user)
-    for i in anchor_list:
-        data = i.data
-        data = cryptocode.decrypt(data, request.user.username+str(request.user.id))
-        i.data = data
+    # for i in anchor_list:
+    #     data = i.data
+    #     data = cryptocode.decrypt(data, request.user.username+str(request.user.id))
+    #     i.data = data
     return render(request, 'wisely/anchor.html', context={'anchor_list': anchor_list})
 
 
@@ -238,7 +238,7 @@ def anchor_update_view(request):
             anchor.objects.get(id=anchor_id).delete()
         else:
             anchor_obj = anchor.objects.get(id=anchor_id)
-            new_data = cryptocode.encrypt(new_data, request.user.username+str(request.user.id))
+            # new_data = cryptocode.encrypt(new_data, request.user.username+str(request.user.id))
             anchor_obj.data = new_data
             anchor_obj.save()
         return JsonResponse({'status': 1})

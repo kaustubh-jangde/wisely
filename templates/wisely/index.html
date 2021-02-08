@@ -9,19 +9,20 @@
         <p class="lead" id="head_p_1">Analysing your day from it's beginning to end gives you great overview on of your habits. Wise-Ly daily journal provides easy to use two phase journaling module where you can start off your day with specifying your targets and end with it's analysis.</p>
         <hr class="my-4">
         {% if user.is_authenticated %}
-            <span class="lead">
-                <a class="btn btn-outline-dark btn-lg" href="{% url 'wisely:morning_url' %}" role="button">Morning Entry</a>
+            <span class="lead" id="index_morning">
+                <a class="btn btn-outline-dark btn-lg" href="{% url 'wisely:morning_url' %}" role="button">Morning</a>
             </span>
-            <span class="lead">
-                <a class="btn btn-dark btn-lg" href="{% url 'wisely:evening_url' %}" role="button">Evening Entry</a>
+            <span class="lead" id="index_evening">
+                <a class="btn btn-dark btn-lg" href="{% url 'wisely:evening_url' %}" role="button">Evening</a>
             </span>
         {% else %}
-            <span class="lead">
+            <span class="lead" id="index_signup_btn">
                 <a class="btn btn-outline-dark btn-lg" href="{% url 'registration:signup_url' %}" role="button">Sign Up</a>
             </span>
-            <span class="lead">
+            <span class="lead" id="index_login_btn">
                 <a class="btn btn-dark btn-lg" href="{% url 'registration:login_url' %}" role="button">Login</a>
             </span>
         {% endif %}
+        <hr>
     </div>
 {% endblock %}

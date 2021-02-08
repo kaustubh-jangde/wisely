@@ -1,8 +1,41 @@
 body{
     background-color: azure;
 }
+
+#even_submit{
+    margin-top: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+#even_delete{
+    margin-top: 1.2rem;
+    margin-left: 10px;
+    margin-bottom: 1rem;
+}
+
+#index_morning{
+    margin-top: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+#index_evening{
+    margin-top: 1.2rem;
+    margin-left: 10px;
+    margin-bottom: 1rem;
+}
+
+#index_signup_btn{
+    margin-top: 1.2rem;
+    margin-bottom: 1rem;
+}
+#index_login_btn{
+    margin-top: 1.2rem;
+    margin-left: 10px;
+    margin-bottom: 1rem;
+}
+
 textarea{
-    font-family: Roboto, cursive;
+    font-family: Roboto, sans-serif;
     font-weight: bold;
 }
 p{
@@ -16,7 +49,7 @@ p{
     margin-left: 10px;
 }
 #index_header{
-    font-family:Roboto, cursive;
+    font-family:Roboto, sans-serif;
     font-size: 2.5rem;
     font-weight: bold;
     color: coral;
@@ -58,12 +91,6 @@ p{
 .mod_btn_even:hover{
     background-color: transparent;
     color: green;
-}
-#btn_div{
-    position: absolute;
-    left: 50%;
-    top: 1.2rem;
-    transform: translateX(-50%);
 }
 #display_date{
     font-family: "Dancing Script", cursive;

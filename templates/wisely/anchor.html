@@ -55,7 +55,7 @@
                 <form method="post">{% csrf_token %}
                     <label for="anc_inp"></label>
                     <textarea name="anchor" class="form-control" id="anc_inp" cols="40" rows="10" placeholder="Add new Anchor" style="display: block; margin:auto"></textarea>
-                    <button class="btn btn-primary" style="margin: 3% 41% 0;" id="anchor_submit">Add Anchor</button>
+                    <button class="btn btn-primary" id="anchor_submit">Add Anchor</button>
                 </form>
             </div>
         </div>
@@ -93,7 +93,7 @@
                     $(update_confirm_id).animate({'opacity': 'show', 'animation': 'easeout'}, 500)
                 }, 100)
                 setTimeout(function (){
-                    $(textarea_id).attr('placeholder', 'Update Anchor here. Submitting empty data will delete the anchor')
+                    $(textarea_id).attr('placeholder', 'Submitting empty data will delete the anchor')
                 }, 500)
             }
         })
