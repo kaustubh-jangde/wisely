@@ -124,3 +124,18 @@ p{
     left: 46%;
     background-color: transparent;
 }
+#iut_prev_log{
+    font-family: Roboto, sans-serif;
+    color: #7d62ff;
+    font-weight: bold;
+}
+#todo_prev_log{
+    font-family: Roboto, sans-serif;
+    color: #7d62ff;
+    font-weight: bold;
+}
+#not_to_do_prev_log{
+    font-family: Roboto, sans-serif;
+    color: #7d62ff;
+    font-weight: bold;
+}

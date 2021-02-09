@@ -180,9 +180,9 @@
     }
 
     function reload_btn_default_styling(){
-        iut_reload.css('left', '48%')
-        todo_reload.css('left', '48%')
-        not_to_do_reload.css('left', '48%')
+        iut_reload.css('left', '46%')
+        todo_reload.css('left', '46%')
+        not_to_do_reload.css('left', '46%')
     }
 
 
@@ -334,19 +334,19 @@
         iut3_text_area.val(prev_data['iut3'])
         iut4_text_area.val(prev_data['iut4'])
         iut_perv_log.text('Table imported from '+ prev_date)
-        iut_reload.css('left', "30%")
+        iut_reload.hide()
     })
 
     todo_reload.click(function (){
         todo_text_area.val(prev_data['todo'])
         todo_prev_log.text('Todo list from '+prev_date)
-        todo_reload.css('left', "30%")
+        todo_reload.hide()
     })
 
     not_to_do_reload.click(function (){
         not_to_do_text_area.val(prev_data['not_to_do'])
         not_to_do_prev_log.text('Not to-do list from '+prev_date)
-        not_to_do_reload.css('left', "30%")
+        not_to_do_reload.hide()
     })
 
 </script>
