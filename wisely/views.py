@@ -93,13 +93,16 @@ def morning_ajax(request):
     if len(morning) == 0:
         print('does not exist')
         prev_morning = morning_entry.objects.filter(user_id=request.user)
-        if len(prev_morning) == 0:
+        prev_dates = [obj.date for obj in prev_morning]
+        past_dates = list()
+        for i in prev_dates:
+            if i < date.date():
+                past_dates.append(i)
+        if len(past_dates) == 0:
             return JsonResponse({'status': 0, 'val_dict': val_dict, 'prev': 0})
         else:
-            prev_date = max(obj.date for obj in prev_morning)
+            prev_date = max(past_dates)
             print(prev_date)
-            if prev_date > date.date():
-                return JsonResponse({'status': 0, 'val_dict': val_dict, 'prev': 0})
             prev_data = morning_entry.objects.filter(user_id=request.user, date=prev_date)[0].data
             # prev_data = cryptocode.decrypt(prev_data, request.user.username+str(request.user.id))
             print(prev_data)

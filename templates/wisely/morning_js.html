@@ -236,6 +236,7 @@
                 if(data['status'] === 1)
                 {
                     exists_change(val_dict)
+                    reload_log_evacuation()
                     reload_hide()
                 }
                 else{
@@ -346,7 +347,9 @@
     not_to_do_reload.click(function (){
         not_to_do_text_area.val(prev_data['not_to_do'])
         not_to_do_prev_log.text('Not to-do list from '+prev_date)
-        not_to_do_reload.hide()
+        not_to_do_reload.hide(
+
+        )
     })
 
 </script>
